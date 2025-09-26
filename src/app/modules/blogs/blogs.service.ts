@@ -39,7 +39,10 @@ const getAllCount = async () => {
   ]);
 
   if (result.length > 0) {
-    return result[0].totalViews;
+    return {
+      totalWebViews: result[0].totalViews,
+      totalPosts: await Blogs.countDocuments(),
+    };
   } else {
     return 0;
   }

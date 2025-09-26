@@ -68,10 +68,24 @@ const deleteBlog = async (req: Request, res: Response) => {
   }
 };
 
+
+const getAllCount = async (req: Request, res: Response) => {
+  try {
+    const count = await BlogService.getAllCount();
+    res.status(200).json({
+      message: "Blog statistics retrieved successfully",
+      data: count,
+    });
+  } catch (error) {
+    throw new AppError(`Failed to retrieve blog statistics: ${error}`, 500);
+  }
+};
+
 export const BlogController = {
   createBlog,
   getAllBlogs,
   getSingleBlog,
+  getAllCount,
   updateBlog,
   deleteBlog,
 };
