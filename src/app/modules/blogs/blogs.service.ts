@@ -29,9 +29,6 @@ const updateBlogs = async (id: string, payload: Partial<Iblog>) => {
 };
 
 const getAllBlogs = async ({ page = 1, limit = 10 }) => {
-  
- 
-
   const skip = (page - 1) * limit;
 
   const [totalBlogs, blogs] = await Promise.all([
@@ -50,7 +47,8 @@ const getAllBlogs = async ({ page = 1, limit = 10 }) => {
 };
 
 const getSingleBlog = async (slug: string) => {
-  const blog = await Blogs.findOne({ where: { slug } });
+  const blog = await Blogs.findOne({ slug });
+  await Blogs.updateOne({ slug }, { $inc: { views: 1 } });
   if (!blog) {
     throw new Error("Blog not found");
   }
