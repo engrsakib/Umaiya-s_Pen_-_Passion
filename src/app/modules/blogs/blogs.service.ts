@@ -28,6 +28,23 @@ const updateBlogs = async (id: string, payload: Partial<Iblog>) => {
   return Blogs.findById(id);
 };
 
+const getAllCount = async () => {
+  const result = await Blogs.aggregate([
+    {
+      $group: {
+        _id: null,
+        totalViews: { $sum: "$views" },
+      },
+    },
+  ]);
+
+  if (result.length > 0) {
+    return result[0].totalViews;
+  } else {
+    return 0;
+  }
+};
+
 const getAllBlogs = async ({ page = 1, limit = 10 }) => {
   const skip = (page - 1) * limit;
 
@@ -70,4 +87,5 @@ export const BlogService = {
   getSingleBlog,
   deleteBlogs,
   updateBlogs,
+  getAllCount,
 };
