@@ -4,7 +4,7 @@ import { Blogs } from "./blogs.mode";
 
 const createBlog = async (payload: Iblog) => {
   const BaseSlug = payload.title.toLowerCase().split(" ").join("-");
-  let slug = `${BaseSlug}-division`;
+  let slug = `${BaseSlug}`;
   const existingBlog = await Blogs.findOne({ where: { title: payload.title } });
   if (existingBlog) {
     throw new Error("Blog with this slug already exists");
