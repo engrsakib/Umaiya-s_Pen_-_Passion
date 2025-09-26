@@ -17,8 +17,9 @@ const createBlog = async (req: Request, res: Response) => {
 };
 
 const getAllBlogs = async (req: Request, res: Response) => {
+  const { page = 1, limit = 10 } = req.query;
   try {
-    const blogs = await BlogService.getAllBlogs();
+    const blogs = await BlogService.getAllBlogs({ page: page as number, limit: limit as number });
     res.status(200).json({
       message: "Blogs retrieved successfully",
       data: blogs,

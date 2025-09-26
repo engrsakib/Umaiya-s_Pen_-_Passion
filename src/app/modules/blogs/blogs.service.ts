@@ -1,7 +1,6 @@
 import { Iblog } from "./blogs.interface";
 import { Blogs } from "./blogs.mode";
 
-
 const createBlog = async (payload: Iblog) => {
   const BaseSlug = payload.title.toLowerCase().split(" ").join("-");
   let slug = `${BaseSlug}`;
@@ -29,9 +28,25 @@ const updateBlogs = async (id: string, payload: Partial<Iblog>) => {
   return Blogs.findById(id);
 };
 
-const getAllBlogs = async () => {
-  const blogs = await Blogs.find();
-  return blogs;
+const getAllBlogs = async ({ page = 1, limit = 10 }) => {
+  
+ 
+
+  const skip = (page - 1) * limit;
+
+  const [totalBlogs, blogs] = await Promise.all([
+    Blogs.countDocuments(),
+    Blogs.find().skip(skip).limit(limit).sort({ createdAt: -1 }),
+  ]);
+
+  return {
+    meta: {
+      total: totalBlogs,
+      page: page,
+      totalPages: Math.ceil(totalBlogs / limit),
+    },
+    blogs,
+  };
 };
 
 const getSingleBlog = async (slug: string) => {
